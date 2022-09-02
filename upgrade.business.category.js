@@ -1,28 +1,16 @@
-/**
- * This component displays business category cards
- *
- * @param {function} handleSubmit For submitting the form
- */
+// Used Settlement Tabs scrollTooffset function here
 
 import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, Text, TouchableOpacity,ScrollView, View, Platform, Keyboard, Image, Button } from 'react-native';
 import FlatScrollView from '../../../../modules/FlatScrollView';
 import styles from './styles';
-import { OmnitureTrackAction, OmnitureTrackState } from '../../../../utilities/helper/utils';
-import I18n from '../../../../utilities/i18n/language.utils';
-import CachedImage from '../../../../modules/CachedImage';
 import { ICONS } from '../../../../utilities/constants/icons';
 
 const UpgradeBusinessCategory = props => {
     const {
-        goToNext,
-        registrationConfig,
         merchantData,
         businessDetails,
-        formSubCategory,
-        bronzeUpgradeActions,
         merchantDetailsAction,
-        businessCategory
     } = props;
     const scrollView = useRef();
     const flatListParentView = useRef();
@@ -30,25 +18,6 @@ const UpgradeBusinessCategory = props => {
     const [category, setCategory] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0)
     const [coords,setCoords] = useState([])
-    // const updateStoreList = () => {
-    //     let storeList = [];
-    //     if (registrationConfig && registrationConfig?.length > 0) {
-    //         registrationConfig.forEach(item => {
-    //             if (item.key === 'categoryStoreList') {
-    //                 storeList = item.items;
-    //             }
-    //         });
-    //     }
-    //     return storeList;
-    // };
-
-    const setCategoryAndSubCategory = ({ businessCategory }, subCategory) => {
-        OmnitureTrackAction('register:businessCategory:submit:click', { registrationStep: 'postLogin' });
-        Keyboard.dismiss();
-        const finalData = { ...businessDetails, subCategory, businessCategory };
-        bronzeUpgradeActions.setBusinessInfo(finalData);
-        goToNext('UpgradePanDetails');
-    };
     const onContentSizeChanged = () => {
         if (index1 !== -1) {
             flatListParentView?.current?.measure((width, height, px, py) => {
@@ -59,15 +28,6 @@ const UpgradeBusinessCategory = props => {
             });
         }
     };
-    console.log(scrollView,'scrollView')
-    useEffect(() => {
-        // const list = updateStoreList();
-        // if (list?.length > 0) {
-        //     setStoreList(list);
-        // }
-        //Verify again
-        OmnitureTrackState('register:BusinessCategory', { registrationStep: 'postLogin' });
-    }, []);
     const _renderItem = ({ item: categoryItem, index }) => {
         // const selected = false;
         const businessCategoriesCheck = business => {
@@ -104,29 +64,7 @@ const UpgradeBusinessCategory = props => {
                     }
                     onPress={() => {businessCategoriesCheck(categoryItem)}}
                 >
-                    <CachedImage
-                        resizeMethod="resize"
-                        source={{ uri: categoryItem.imgUri }}
-                        resizeMode="contain"
-                        style={[styles.sideImgStyle]}
-                    />
-                    <Text
-                        testID={'cardText' + index}
-                        accessibilityLabel={Platform.select({ android: 'cardText' + index })}
-                        style={[styles.cardTitle, { color: categoryItem?.color }]}
-                    >
-                        {categoryItem?.titleLocale[I18n.currentLocale()]}
-                    </Text>
-                    {categoryItem?.subCategory?.length > 1 && (
-                        <Image
-                            style={[styles.collapsiblestyle, { tintColor: categoryItem?.color }]}
-                            source={
-                                categoryItem?.businessCategory === category
-                                    ? ICONS.COLLAPSIBLE
-                                    : ICONS.COLLAPSIBLE_EXPAND
-                            }
-                        />
-                    )}
+                 <Text>Hello</Text>
                 </TouchableOpacity>
                 {category === categoryItem?.businessCategory && categoryItem?.subCategory?.length > 1 && (
                     <View style={styles.businessSubcategoryAccordion}>
@@ -165,21 +103,100 @@ const UpgradeBusinessCategory = props => {
                 keyExtractor={(item, index) => item.title + index.toString()}
                 initialNumToRender={businessCategory?.items?.length}
             />
-            {/* <ScrollView
-            ref={(ref) => {
-                ref.current = ref
-            }}
-            showsVerticalScrollIndicator={false}
-            style={{ marginBottom: 27 }}
-            >
-            <Button title='Press me' onPress={scrollHandler} />
-            <View>
-                {businessCategory.items.map((item,index) => _renderItem({item,index}))}
-            </View>
-            </ScrollView> */}
         </View>
         </FlatScrollView>
     );
 };
 
 export default UpgradeBusinessCategory;
+
+    const businessCategory = {
+    "items": [
+      {
+        "titleLocale": {
+          "en": "Art Craft and Collectibles",
+          "hi": ""
+        },
+        "title": "Art Craft and Collectibles",
+        "imgUri": "https://fcapp-cdn.freecharge.in/merchant/mobile/images/registration/store-list/stationary.png",
+        "color": "#ffffff",
+        "businessCategory": "Art Craft and Collectibles",
+        "subCategory": [
+          "Stationary, Printing And Writing Paper",
+          "Antiques",
+          "Art and craft supplies",
+          "Art dealers and galleries",
+          "Camera and photographic supplies",
+          "Digital art",
+          "Memorabilia",
+          "Music store - instruments and sheet music",
+          "Sewing, needlework and fabrics",
+          "Stamp and coin",
+          "Vintage and collectables"
+        ]
+      },
+      {
+        "titleLocale": {
+          "en": "Goods Store",
+          "hi": ""
+        },
+        "title": "Goods Store",
+        "imgUri": "https://fcapp-cdn.freecharge.in/merchant/mobile/images/registration/store-list/dairy_products.png",
+        "color": "#444444",
+        "businessCategory": "Goods Store",
+        "subCategory": ["Dairy Products Stores"]
+      },
+      {
+        "titleLocale": {
+          "en": "Automotive",
+          "hi": ""
+        },
+        "title": "Automotive",
+        "imgUri": "https://fcapp-cdn.freecharge.in/merchant/mobile/images/registration/store-list/service_stations.png",
+        "color": "#ffffff",
+        "businessCategory": "Automotive",
+        "subCategory": ["Service Stations", "Automotive"]
+      },
+      {
+        "titleLocale": {
+          "en": "Education and Jobs",
+          "hi": ""
+        },
+        "title": "Education and Jobs",
+        "imgUri": "https://fcapp-cdn.freecharge.in/merchant/mobile/images/registration/store-list/education.png",
+        "color": "#ffffff",
+        "businessCategory": "Education and Jobs",
+        "subCategory": [
+          "Personal Teaching",
+          "Job Consulting",
+          "Online Teaching"
+        ]
+      },
+      {
+        "titleLocale": {
+          "en": "Grocery and supermarkets",
+          "hi": ""
+        },
+        "title": "Grocery and supermarkets",
+        "imgUri": "https://fcapp-cdn.freecharge.in/merchant/mobile/images/registration/store-list/groceries.png",
+        "color": "#444444",
+        "businessCategory": "Grocery and supermarkets",
+        "subCategory": ["Grocery"]
+      },
+      {
+        "titleLocale": {
+          "en": "Health And PersonalCare",
+          "hi": ""
+        },
+        "title": "Health And PersonalCare",
+        "imgUri": "https://fcapp-cdn.freecharge.in/merchant/mobile/images/registration/store-list/drugs_bg.png",
+        "color": "#444444",
+        "businessCategory": "Health And PersonalCare",
+        "subCategory": [
+          "Medical care",
+          "Vision care",
+          "Vitamins and supplements"
+        ]
+      }
+    ]
+  }
